@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honeypot Agent Tester - Interactive Testing Suite</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="icon">🛡️</span>
+                    Honeypot Agent Tester
+                </h1>
+                <p class="subtitle">Interactive Testing Suite for Scam Detection Agent</p>
+            </div>
+            
+            <div class="status-badge" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span class="status-text">Not Connected</span>
+            </div>
+        </header>
+
+        <!-- Configuration Panel -->
+        <section class="config-panel">
+            <h2 class="section-title">
+                <span class="icon">⚙️</span>
+                Configuration
+            </h2>
+            <div class="config-grid">
+                <div class="input-group">
+                    <label for="apiUrl">API Endpoint</label>
+                    <input 
+                        type="text" 
+                        id="apiUrl" 
+                        value="http://136.116.51.121:8080/api/honey-pot"
+                        placeholder="Enter API endpoint URL"
+                    >
+                </div>
+                <div class="input-group">
+                    <label for="apiKey">API Key</label>
+                    <input 
+                        type="text" 
+                        id="apiKey" 
+                        value="your-secret-api-key-here"
+                        placeholder="Enter API key"
+                    >
+                </div>
+                <button class="btn btn-primary" id="testConnection">
+                    <span class="btn-icon">🔌</span>
+                    Test Connection
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Testing Area -->
+        <div class="testing-area">
+            <!-- Left Panel - Test Scenarios -->
+            <aside class="scenarios-panel">
+                <h2 class="section-title">
+                    <span class="icon">📋</span>
+                    Quick Test Scenarios
+                </h2>
+                
+                <div class="scenario-category">
+                    <h3 class="category-title">Scam Messages</h3>
+                    <div class="scenario-list" id="scamScenarios">
+                        <button class="scenario-btn" data-message="Congratulations! You've won Rs 50,000! Send your UPI ID to claim: 9876543210">
+                            <span class="scenario-icon">🎁</span>
+                            <span class="scenario-text">Prize/Lottery Scam</span>
+                        </button>
+                        <button class="scenario-btn" data-message="Your bank account has been locked. Click here to verify: http://fake-bank.com">
+                            <span class="scenario-icon">🏦</span>
+                            <span class="scenario-text">Bank Verification</span>
+                        </button>
+                        <button class="scenario-btn" data-message="Dear customer, your KYC needs update. Share your Aadhar and PAN details urgently">
+                            <span class="scenario-icon">📄</span>
+                            <span class="scenario-text">KYC Update Scam</span>
+                        </button>
+                        <button class="scenario-btn" data-message="Work from home! Earn 50,000 per month. Send 5000 registration fee to get started">
+                            <span class="scenario-icon">💼</span>
+                            <span class="scenario-text">Work-from-Home</span>
+                        </button>
+                        <button class="scenario-btn" data-message="You won 1 lakh! Share your UPI ID and phone number to claim the prize">
+                            <span class="scenario-icon">💰</span>
+                            <span class="scenario-text">UPI Prize Scam</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scenario-category">
+                    <h3 class="category-title">Legitimate Messages</h3>
+                    <div class="scenario-list" id="legitimateScenarios">
+                        <button class="scenario-btn" data-message="Hey mom, I'll be home late tonight">
+                            <span class="scenario-icon">👋</span>
+                            <span class="scenario-text">Family Message</span>
+                        </button>
+                        <button class="scenario-btn" data-message="Meeting at 3 PM tomorrow, don't forget">
+                            <span class="scenario-icon">📅</span>
+                            <span class="scenario-text">Work Reminder</span>
+                        </button>
+                        <button class="scenario-btn" data-message="Happy birthday! Hope you have a great day!">
+                            <span class="scenario-icon">🎂</span>
+                            <span class="scenario-text">Birthday Wish</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scenario-actions">
+                    <button class="btn btn-secondary" id="newSession">
+                        <span class="btn-icon">🔄</span>
+                        New Session
+                    </button>
+                    <button class="btn btn-danger" id="clearChat">
+                        <span class="btn-icon">🗑️</span>
+                        Clear Chat
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Right Panel - Chat Interface -->
+            <main class="chat-panel">
+                <div class="chat-header">
+                    <div class="chat-info">
+                        <h2 class="section-title">
+                            <span class="icon">💬</span>
+                            Conversation
+                        </h2>
+                        <span class="session-id" id="sessionId">Session: Not Started</span>
+                    </div>
+                    <div class="chat-stats">
+                        <div class="stat">
+                            <span class="stat-label">Messages</span>
+                            <span class="stat-value" id="messageCount">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value" id="avgResponse">0ms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="empty-state">
+                        <div class="empty-icon">🤖</div>
+                        <h3>Ready to Test!</h3>
+                        <p>Select a test scenario from the left or type your own message below</p>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Type a message to test the agent..."
+                            rows="1"
+                        ></textarea>
+                        <button class="btn btn-send" id="sendMessage">
+                            <span class="btn-icon">📤</span>
+                            Send
+                        </button>
+                    </div>
+                    <div class="loading-indicator" id="loadingIndicator">
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span class="loading-text">Agent is thinking...</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Intelligence Extraction Panel -->
+        <section class="intelligence-panel">
+            <h2 class="section-title">
+                <span class="icon">🔍</span>
+                Intelligence Extracted
+            </h2>
+            <div class="intelligence-grid" id="intelligenceGrid">
+                <div class="intelligence-item">
+                    <span class="intelligence-label">UPI IDs</span>
+                    <span class="intelligence-count" id="upiCount">0</span>
+                </div>
+                <div class="intelligence-item">
+                    <span class="intelligence-label">Phone Numbers</span>
+                    <span class="intelligence-count" id="phoneCount">0</span>
+                </div>
+                <div class="intelligence-item">
+                    <span class="intelligence-label">Bank Accounts</span>
+                    <span class="intelligence-count" id="accountCount">0</span>
+                </div>
+                <div class="intelligence-item">
+                    <span class="intelligence-label">Phishing Links</span>
+                    <span class="intelligence-count" id="linkCount">0</span>
+                </div>
+                <div class="intelligence-item">
+                    <span class="intelligence-label">IFSC Codes</span>
+                    <span class="intelligence-count" id="ifscCount">0</span>
+                </div>
+            </div>
+            <div class="intelligence-details" id="intelligenceDetails"></div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
